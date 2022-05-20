@@ -3,3 +3,4 @@ uvicorn
 PyJWT
 python-decouple
 python-dotenv
+gunicorn
