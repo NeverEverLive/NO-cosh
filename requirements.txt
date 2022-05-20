@@ -1,2 +1,5 @@
 FastAPI
 uvicorn
+PyJWT
+python-decouple
+python-dotenv

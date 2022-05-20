@@ -6,14 +6,20 @@ from api.general_pages.home_page import general_pages_router
 # from db.session import connect
 # from db.base_class import Base
 # from db.session import engine, SessionLocal
-# from model import Category, OrderSchema, UserSchema, UserLoginSchema
-# from api.auth.jwt_handler import signJWT
+from model import Category, OrderSchema, UserSchema, UserLoginSchema
+from api.auth.jwt_handler import signJWT
 # from api.auth.jwt_bearer import jwtBearer
 # from db.session import session
 # from sqlalchemy import select
 
 def include_router(app):
     app.include_router(general_pages_router)
+
+# POSTGRES_USER = emuxbiigbsdiwr
+# POSTGRES_PASSWORD = b6c0405a9b8eb05df613e33abe79abbeb1aa5aea254402b94e178bb61cfb4c95
+# POSTGRES_SERVER = ec2-52-86-115-245.compute-1.amazonaws.com
+# POSTGRES_PORT = 5432
+# POSTGRES_DB = d6g1mar985bj8b
 
 orders = [
     {
@@ -76,30 +82,30 @@ def get_order(id: int):
 #     }
 
 
+@app.post("/users/signup", tags=["users"])
+def user_signup(user: UserSchema = Body(default=None)):
+    users.append(user)
+    return signJWT(user.email)
+
+
 # @app.post("/users/signup", tags=["users"])
-# def user_signup(user: UserSchema = Body(default=None)):
-#     users.append(user)
-#     return signJWT(user.email)
-
-
-# # @app.post("/users/signup", tags=["users"])
-# def check_user(data: UserLoginSchema):
-#     # добавить проверку на то что токен не в blacklist'е
-#     for user in users:
-#         if user.email == data.email and user.password == data.password:
-#             return True
-#         return False
+def check_user(data: UserLoginSchema):
+    # добавить проверку на то что токен не в blacklist'е
+    for user in users:
+        if user.email == data.email and user.password == data.password:
+            return True
+        return False
 
 
 
-# @app.post("/users/login", tags=["users"])
-# def user_login(user: UserLoginSchema = Body(default=None)):
-#     if check_user(user):
-#         return signJWT(user.email)
-#     else:
-#         return {
-#             "error": "Invalid login details"
-#         }
+@app.post("/users/login", tags=["users"])
+def user_login(user: UserLoginSchema = Body(default=None)):
+    if check_user(user):
+        return signJWT(user.email)
+    else:
+        return {
+            "error": "Invalid login details"
+        }
 
 
 # @app.post("users/logout", tags=["users"])
