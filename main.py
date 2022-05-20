@@ -8,7 +8,7 @@ from api.general_pages.home_page import general_pages_router
 # from db.session import engine, SessionLocal
 from model import Category, OrderSchema, UserSchema, UserLoginSchema
 from api.auth.jwt_handler import signJWT
-# from api.auth.jwt_bearer import jwtBearer
+from api.auth.jwt_bearer import jwtBearer
 # from db.session import session
 # from sqlalchemy import select
 
@@ -73,13 +73,13 @@ def get_order(id: int):
             }
 
 
-# @app.post("/orders", dependencies=[Depends(jwtBearer())], tags=['orders'])
-# def add_order(order: OrderSchema):
-#     order.id = len(orders) + 1
-#     orders.append(order.dict())
-#     return {
-#         "message": "Order created"
-#     }
+@app.post("/orders", dependencies=[Depends(jwtBearer())], tags=['orders'])
+def add_order(order: OrderSchema):
+    order.id = len(orders) + 1
+    orders.append(order.dict())
+    return {
+        "message": "Order created"
+    }
 
 
 @app.post("/users/signup", tags=["users"])
