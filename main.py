@@ -49,22 +49,22 @@ def start_application():
 
 app = start_application()
 
-# @app.get("/orders", tags=['orders'])
-# def get_orders():
-#     return {"data": orders, "status": 0}
+@app.get("/orders", tags=['orders'])
+def get_orders():
+    return {"data": orders, "status": 0}
 
 
-# @app.get("/orders/{id}", tags=['orders'])
-# def get_order(id: int):
-#     if id > len(orders):
-#         return {
-#             "error": "Order with this id does not exist"
-#         }
-#     for order in orders:
-#         if order["id"] == id:
-#             return {
-#                 "data": order
-#             }
+@app.get("/orders/{id}", tags=['orders'])
+def get_order(id: int):
+    if id > len(orders):
+        return {
+            "error": "Order with this id does not exist"
+        }
+    for order in orders:
+        if order["id"] == id:
+            return {
+                "data": order
+            }
 
 
 # @app.post("/orders", dependencies=[Depends(jwtBearer())], tags=['orders'])
