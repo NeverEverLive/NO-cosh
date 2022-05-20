@@ -85,14 +85,14 @@ def add_order(order: OrderSchema):
 @app.post("/users/signup", tags=["users"])
 def user_signup(user: UserSchema = Body(default=None)):
     users.append(user)
-    return signJWT(user.email)
+    return signJWT(user.full_name)
 
 
 # @app.post("/users/signup", tags=["users"])
 def check_user(data: UserLoginSchema):
     # добавить проверку на то что токен не в blacklist'е
     for user in users:
-        if user.email == data.email and user.password == data.password:
+        if user.full_name == data.full_name and user.password == data.password:
             return True
         return False
 
@@ -101,7 +101,7 @@ def check_user(data: UserLoginSchema):
 @app.post("/users/login", tags=["users"])
 def user_login(user: UserLoginSchema = Body(default=None)):
     if check_user(user):
-        return signJWT(user.email)
+        return signJWT(user.full_name)
     else:
         return {
             "error": "Invalid login details"

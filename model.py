@@ -16,7 +16,6 @@ class OrderSchema(BaseModel):
 
 class UserSchema(BaseModel):
     full_name: str = Field(default=None)
-    email: EmailStr = Field(default=None)
     password: str = Field(default=None)
     class Config:
         the_schema = {
@@ -29,7 +28,7 @@ class UserSchema(BaseModel):
 
 
 class UserLoginSchema(BaseModel):
-    email: EmailStr = Field(default=None)
+    full_name: str = Field(default=None)
     password: str = Field(default=None)
     class Config:
         the_schema = {
