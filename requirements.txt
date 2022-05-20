@@ -4,3 +4,4 @@ PyJWT
 python-decouple
 python-dotenv
 gunicorn
+pydentic[email]
