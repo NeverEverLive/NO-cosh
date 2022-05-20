@@ -1,6 +1,6 @@
 # main:app --reload
 from typing import List
-# from core.config import settings
+from core.config import settings
 from fastapi import Body, FastAPI, Depends
 from api.general_pages.home_page import general_pages_router
 # from db.session import connect
@@ -39,7 +39,7 @@ users = []
 
 
 def start_application():
-    app = FastAPI() # title=settings.PROJECT_NAME, version=settings.PROJECT_VERSION
+    app = FastAPI(title=settings.PROJECT_NAME, version=settings.PROJECT_VERSION) # 
     include_router(app)
     # create_tables()
     return app
