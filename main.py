@@ -118,6 +118,11 @@ def user_logout(user: UserLoginSchema = Body(default=None)):
 def get_all_orders():
     try:
         connection = connect()
+        print(settings.POSTGRES_SERVER, 
+        settings.POSTGRES_PORT, 
+        settings.POSTGRES_DB, 
+        settings.POSTGRES_USER, 
+        settings.POSTGRES_PASSWORD)
         cursor = connection.cursor()
         sql = """SELECT * FROM public.category_table"""
         cursor.execute(sql)
