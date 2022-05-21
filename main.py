@@ -3,7 +3,7 @@ from typing import List
 from core.config import settings
 from fastapi import Body, FastAPI, Depends
 from api.general_pages.home_page import general_pages_router
-# from db.session import connect
+from db.session import connect
 # from db.base_class import Base
 # from db.session import engine, SessionLocal
 from model import Category, OrderSchema, UserSchema, UserLoginSchema
@@ -108,11 +108,25 @@ def user_login(user: UserLoginSchema = Body(default=None)):
         }
 
 
-# @app.post("users/logout", tags=["users"])
-# def user_logout(user: UserLoginSchema = Body(default=None)):
-#     # Добавить токен в блэклист
-#     pass
+@app.post("users/logout", tags=["users"])
+def user_logout(user: UserLoginSchema = Body(default=None)):
+    # Добавить токен в блэклист
+    pass
 
+
+@app.get("/test_db_orders", tags=["orders"])
+def get_all_orders():
+    try:
+        connection = connect()
+        cursor = connection.cursor()
+        sql = """SELECT * FROM public.category_table"""
+        cursor.execute(sql)
+        ex = cursor.fetchall()
+
+    except Exception as Error:
+        return {"message": str(Error), "status": 1}
+
+    return {"data": dict(ex), "status": 0}
 
 # # db = SessionLocal()
 

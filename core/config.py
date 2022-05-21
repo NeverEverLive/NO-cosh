@@ -3,7 +3,8 @@ import os
 from dotenv import load_dotenv
 from pathlib import Path
 
-env_path = Path('/home/nel/Data/hakaton') / '.env'
+env_path = Path('/home/nel/Data/test_hakaton') / '.env'
+print('env', env_path)
 load_dotenv(dotenv_path=env_path)
 
 class Settings:
