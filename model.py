@@ -77,3 +77,16 @@ class Category(BaseModel):
 
     class Config:
         orm_mode = True
+
+
+class AdvertisementSchema(BaseModel):
+    id: int = Field(default=None)
+    text: str = Field(default=None)
+
+    class Config:
+        the_schema = {
+            
+            "advertisement_demo": {
+                "text": "test text"
+            }
+        }

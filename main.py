@@ -9,10 +9,11 @@ from api.general_pages.home_page import general_pages_router
 from db.session import connect
 # from db.base_class import Base
 # from db.session import engine, SessionLocal
-from model import Category, OrderSchema, UserSchema, UserLoginSchema
+from model import AdvertisementSchema, Category, OrderSchema, UserSchema, UserLoginSchema
 from api.auth.jwt_handler import signJWT
 from api.auth.jwt_bearer import jwtBearer
 from datetime import timedelta, datetime
+from random import randint as rand
 # from db.session import session
 # from sqlalchemy import select
 
@@ -406,6 +407,78 @@ def get_all_orders(request: Request):
     }
 
     return output
+
+
+
+@app.get("/adv", tags=["advertisement"])
+def get_advertisements():
+    connection = connect()
+    cursor = connection.cursor()
+    try:
+        sql = """
+                SELECT count(id)
+                FROM public.advertisement_table"""
+        cursor.execute(sql)
+        count = cursor.fetchone()[0]
+
+        number = rand(0, count-1)
+
+        print(id)
+
+        sql = """SELECT json_agg(to_json(row))
+                FROM (SELECT *
+                FROM public.advertisement_table) row"""
+
+        cursor.execute(sql, (id,))
+        ads = cursor.fetchone()[0]
+
+        print(ads[number])
+
+        output_json = {
+            "data": ads[number],
+            "status": 0
+        }
+
+    except Exception as error:
+        output_json = {
+            "message": str(error),
+            "status": 1
+        }
+    finally:
+        connection.commit()
+        cursor.close()
+        connection.close()
+
+    return output_json
+
+
+@app.post("/advertisement", tags=["advertisement"])
+def create_advertisement(ad: AdvertisementSchema):
+    connection = connect()
+    cursor = connection.cursor()
+    try:
+        sql = """INSERT INTO public.advertisement_table(text)
+                 values
+                 (%s)"""
+
+        cursor.execute(sql, (ad.text,))
+        
+        output_json = {
+            "message": "Advertisement added",
+            "status": 2
+        }
+    except Exception as error:
+        output_json = {
+            "message": str(error),
+            "status": 1
+        }
+    finally:
+        connection.commit()
+        cursor.close()
+        connection.close()
+    
+    return output_json
+
 
 # # db = SessionLocal()
 
