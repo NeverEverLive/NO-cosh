@@ -37,6 +37,24 @@ class UserSchema(BaseModel):
                 "phone": "123" 
             }
         }
+    
+    def __init__(self, id, login, password, name, latitude, longitude, role, balance, phone):
+        super(UserSchema, self).__init__()
+        self.id = id
+        self.login = login
+        self.password = password
+        self.name = name
+        self.latitude = latitude
+        self.longitude = longitude
+        self.role = role
+        self.balance = balance
+        self.phone = phone
+    
+    def __dict__(self):
+        return {
+            "id": self.id,
+            "text": self.text
+        }
 
 
 class UserLoginSchema(BaseModel):
@@ -83,10 +101,38 @@ class AdvertisementSchema(BaseModel):
     id: int = Field(default=None)
     text: str = Field(default=None)
 
+    def __init__(self, id, text):
+        super(AdvertisementSchema, self).__init__()
+        self.id = id
+        self.text = text
+    
+    def __dict__(self):
+        return {
+            "id": self.id,
+            "text": self.text
+        }
+
+    # def __dict__(self):
+    #     return {"id": }
+
     class Config:
         the_schema = {
             
             "advertisement_demo": {
                 "text": "test text"
+            }
+        }
+
+
+class CommectSchema(BaseModel):
+    id: int = Field(default=None)
+    text: str = Field(default=None)
+    user_id: int = Field(default=None)
+
+    class Config:
+        the_schema = {
+            "comment_demo": {
+                "text": "test text",
+                "user_id": 1
             }
         }

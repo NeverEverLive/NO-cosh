@@ -4,12 +4,13 @@ from typing import List, Union, Any
 
 from h11 import ConnectionClosed
 from core.config import settings
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi import Body, FastAPI, Depends, Header, Request
 from api.general_pages.home_page import general_pages_router
 from db.session import connect
 # from db.base_class import Base
 # from db.session import engine, SessionLocal
-from model import AdvertisementSchema, Category, OrderSchema, UserSchema, UserLoginSchema
+from model import AdvertisementSchema, Category, CommectSchema, OrderSchema, UserSchema, UserLoginSchema
 from api.auth.jwt_handler import signJWT
 from api.auth.jwt_bearer import jwtBearer
 from datetime import timedelta, datetime
@@ -52,6 +53,17 @@ users = []
 def start_application():
     app = FastAPI(title=settings.PROJECT_NAME, version=settings.PROJECT_VERSION) # 
     include_router(app)
+    origins = [
+    "*"
+    ]
+
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=origins,
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
     # create_tables()
     return app
 
@@ -479,6 +491,81 @@ def create_advertisement(ad: AdvertisementSchema):
     
     return output_json
 
+
+@app.get("/comment", tags=["comment"])
+def get_comment():
+    connection = connect()
+    cursor = connection.cursor()
+    try:
+        sql = """SELECT json_agg(to_json(row))
+                 FROM (SELECT *
+                 FROM public.comment_table) row"""
+
+        cursor.execute(sql)
+        ex = cursor.fetchone()[0]
+        
+        print(ex)
+
+        sql = """SELECT json_agg(to_json(row))
+                 FROM (SELECT *
+                 FROM public.user_table) row"""
+
+        cursor.execute(sql)
+        users = cursor.fetchone()[0]
+        # print(user)
+        for index, comment in enumerate(ex):
+            for user in users:
+                if comment['id_user'] == user['id']:
+                    ex[index]['user'] = user
+                    break
+            ex[index].pop('id_user')
+        
+
+        # ex['user'] = user
+
+        print(ex)
+
+        output_json = {
+            "data": ex,
+            "status": 0
+        }
+    except Exception as error:
+        output_json = {
+            "message": str(error),
+            "status": 1
+        }
+    finally:
+        connection.commit()
+        cursor.close()
+        connection.close()
+    
+    return output_json
+
+@app.post("/comment", tags=["comment"])
+def create_advertisement(comment: CommectSchema):
+    connection = connect()
+    cursor = connection.cursor()
+    try:
+        sql = """INSERT INTO public.comment_table(text, id_user)
+                 values
+                 (%s, %s)"""
+        cursor.execute(sql, (comment.text,comment.user_id))
+        
+        output_json = {
+            "message": "Advertisement added",
+            "status": 2
+        }
+    except Exception as error:
+        output_json = {
+            "message": str(error),
+            "status": 1
+        }
+    finally:
+        connection.commit()
+        cursor.close()
+        connection.close()
+    
+    return output_json
 
 # # db = SessionLocal()
 
