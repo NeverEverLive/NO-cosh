@@ -1,5 +1,6 @@
 from pydantic import BaseModel, Field, EmailStr
 
+
 class OrderSchema(BaseModel):
     id: int = Field(default=None)
     title: str = Field(default=None)
@@ -15,10 +16,37 @@ class OrderSchema(BaseModel):
 
 
 class UserSchema(BaseModel):
-    full_name: str = Field(default=None)
+    id: int = Field(default=None)
+    login: str = Field(default=None)
     password: str = Field(default=None)
+    name: str = Field(default=None)
+    latitude: float = Field(default=None)
+    longitude: float = Field(default=None)
+    role: str = Field(default=None)
+    balance: float = Field(default=None)
+    phone: str = Field(default=None)
     class Config:
         the_schema = {
+            "user_demo": {
+                "login": "test",
+                "password": "123",
+                "name": "test",
+                "latitude": 123,
+                "longitude": 123,
+                "role": "Seller",
+                "phone": "123" 
+            }
+        }
+
+
+class UserLoginSchema(BaseModel):
+    id: int = Field(default=None)
+    login: str = Field(default=None)
+    password: str = Field(default=None)
+
+    class Config:
+        the_schema = {
+            
             "user_demo": {
                 "name": "Bek",
                 "email": "help@example.com",
@@ -27,16 +55,13 @@ class UserSchema(BaseModel):
         }
 
 
-class UserLoginSchema(BaseModel):
-    full_name: str = Field(default=None)
-    password: str = Field(default=None)
-    class Config:
-        the_schema = {
-            "user_demo": {
-                "email": "help@example.com",
-                "price": "123" 
-            }
-        }
+class BlackListSchema(BaseModel):
+    id: int = Field(default=None)
+    access_token: str = Field(default=None)
+    access_date: int = Field(default=None)
+    refresh_token: int = Field(default=None)
+    refresh_date: int = Field(default=None)
+    userID: int = Field(default=None)
 
 
 class Category(BaseModel):

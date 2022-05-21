@@ -13,8 +13,8 @@ REFRESH_TOKEN_LIFETIME = 30
 
 def token_response(access_token: str, refresh_token: str):
     return {
-        "access token": access_token,
-        "refresh token": refresh_token
+        "access_token": access_token,
+        "refresh_token": refresh_token
     }
 
 
