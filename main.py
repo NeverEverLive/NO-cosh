@@ -341,27 +341,23 @@ def get_users(id: int):
 
 
 @app.put("/users/{id}", tags=["users"])
-def update_user(id: int, user: UserSchema = Body(default=None)):
+def update_user(id: int = None, money: int = None, user: UserSchema = Body(default=None)):
     
     if user.role not in ["buyer", "seller", "manager", "help", "operator"]:
         return {"message": "Invalid role", "status": 1}
     
+
+
     connection = connect()
     cursor = connection.cursor()
     sql = """UPDATE user_table
              set
-             login = %s,
-             password = %s,
-             name = %s,
-             phone = %s,
-             role = %s,
-             lat = %s,
-             lon = %s
+             balance = balance + %s
              where id = %s
              """
 
-    print(user.login, user.password, user.name, user.phone, user.role, user.latitude, user.longitude, id)
-    cursor.execute(sql, (user.login, user.password, user.name, user.phone, user.role, user.latitude, user.longitude, id))
+    print(id, money)
+    cursor.execute(sql, (id, money))
 
     connection.commit()
     cursor.close()
