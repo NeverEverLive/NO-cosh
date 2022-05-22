@@ -6,3 +6,4 @@ python-dotenv
 gunicorn
 pydentic[email]
 psycopg2-binary
+cloudinary

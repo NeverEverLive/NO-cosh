@@ -38,23 +38,23 @@ class UserSchema(BaseModel):
             }
         }
     
-    def __init__(self, id, login, password, name, latitude, longitude, role, balance, phone):
-        super(UserSchema, self).__init__()
-        self.id = id
-        self.login = login
-        self.password = password
-        self.name = name
-        self.latitude = latitude
-        self.longitude = longitude
-        self.role = role
-        self.balance = balance
-        self.phone = phone
+    # def __init__(self, id, login, password, name, latitude, longitude, role, balance, phone):
+    #     super(UserSchema, self).__init__()
+    #     self.id = id
+    #     self.login = login
+    #     self.password = password
+    #     self.name = name
+    #     self.latitude = latitude
+    #     self.longitude = longitude
+    #     self.role = role
+    #     self.balance = balance
+    #     self.phone = phone
     
-    def __dict__(self):
-        return {
-            "id": self.id,
-            "text": self.text
-        }
+    # def __dict__(self):
+    #     return {
+    #         "id": self.id,
+    #         "text": self.text
+    #     }
 
 
 class UserLoginSchema(BaseModel):

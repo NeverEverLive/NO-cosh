@@ -1,12 +1,10 @@
 # main:app --reload
-from cmath import sqrt
-import re
 from typing import List, Union, Any
 
 from h11 import ConnectionClosed
 from core.config import settings
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi import Body, FastAPI, Depends, Header, Request
+from fastapi import Body, FastAPI, Depends, Header, Request, UploadFile, File
 from api.general_pages.home_page import general_pages_router
 from db.session import connect
 # from db.base_class import Base
@@ -16,6 +14,9 @@ from api.auth.jwt_handler import signJWT
 from api.auth.jwt_bearer import jwtBearer
 from datetime import timedelta, datetime
 from random import randint as rand
+from cloudinary import uploader
+import cloudinary
+
 # from db.session import session
 # from sqlalchemy import select
 
@@ -107,7 +108,9 @@ def user_signup(user: UserSchema = Body(default=None)):
     connection = connect()
     cursor = connection.cursor()
     try:
-        if user.role not in ["buyer", "seller"]:
+        print(user.login)
+        print(user.role)
+        if user.role not in ["buyer", "seller", "manager"]:
             return {"message": "Invalid role", "status": 1}
 
         sql = """
@@ -340,7 +343,7 @@ def get_users(id: int):
 @app.put("/users/{id}", tags=["users"])
 def update_user(id: int, user: UserSchema = Body(default=None)):
     
-    if user.role not in ["buyer", "seller"]:
+    if user.role not in ["buyer", "seller", "manager"]:
         return {"message": "Invalid role", "status": 1}
     
     connection = connect()
@@ -423,8 +426,8 @@ def get_all_orders(request: Request):
 
 
 
-@app.get("/adv", tags=["advertisement"])
-def get_advertisements():
+@app.get("/rand_advertisement", tags=["advertisement"])
+def get_advertisement():
     connection = connect()
     cursor = connection.cursor()
     try:
@@ -449,6 +452,38 @@ def get_advertisements():
 
         output_json = {
             "data": ads[number],
+            "status": 0
+        }
+
+    except Exception as error:
+        output_json = {
+            "message": str(error),
+            "status": 1
+        }
+    finally:
+        connection.commit()
+        cursor.close()
+        connection.close()
+
+    return output_json
+
+
+@app.get("/advertisement", tags=["advertisement"])
+def get_advertisements():
+    connection = connect()
+    cursor = connection.cursor()
+    try:
+
+        sql = """SELECT json_agg(to_json(row))
+                FROM (SELECT *
+                FROM public.advertisement_table) row"""
+
+        cursor.execute(sql, (id,))
+        ads = cursor.fetchone()[0]
+
+
+        output_json = {
+            "data": ads,
             "status": 0
         }
 
@@ -763,6 +798,28 @@ def get_orders():
         connection.close()
     
     return {"data": orders, "status": 0}
+
+
+@app.put("/products", tags=["products"])
+def update_product(id:int, image: UploadFile = File(...)):
+    connection = connect()
+    cursor = connection.cursor()
+    try:
+        result = uploader.upload(image.file)
+        url = result.get('url')
+        
+        sql = """UPDATE product_table 
+                 set
+                 image = %s
+                 where id=%s"""
+        cursor.execute(sql, (url, id))
+    except Exception as error:
+        return {"message": str(error), "status": 1}
+    finally:
+        connection.commit()
+        cursor.close()
+        connection.close()
+    return {"message": "Image link to product", "status": 2}
 # # db = SessionLocal()
 
 # @app.get("/categories", tags=["categories"], response_model=List[Category], status_code=200)

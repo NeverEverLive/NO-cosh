@@ -5,6 +5,15 @@
 import psycopg2
 from core.config import settings
 # from core.config import settings
+import cloudinary
+
+cloudinary.config(
+    cloud_name = "dyfdlg3hu",
+    api_key = "572682716899845",
+    api_secret = "qs5N_SbpcYSD4FWVXp_nP0nO1Rs"
+)
+
+
 def connect():
     print(settings.POSTGRES_SERVER, 
         settings.POSTGRES_PORT, 
