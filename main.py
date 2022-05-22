@@ -341,7 +341,7 @@ def get_users(id: int):
 
 
 @app.put("/users", tags=["users"])
-def update_user(id: int, money: int):
+def update_user(id: int = Body(default=None), money: int = Body(default=None)):
     
     # if user.role not in ["buyer", "seller", "manager", "help", "operator"]:
     #     return {"message": "Invalid role", "status": 1}
