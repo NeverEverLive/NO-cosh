@@ -807,7 +807,7 @@ def update_product(id:int, image: UploadFile = File(...)):
         result = uploader.upload(image.file)
         url = result.get('url')
         
-        print(id)
+        print("id",id)
         print(url)
 
         sql = """UPDATE product_table 
