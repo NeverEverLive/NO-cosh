@@ -110,7 +110,7 @@ def user_signup(user: UserSchema = Body(default=None)):
     try:
         print(user.login)
         print(user.role)
-        if user.role not in ["buyer", "seller", "manager"]:
+        if user.role not in ["buyer", "seller", "manager", "help", "operator"]:
             return {"message": "Invalid role", "status": 1}
 
         sql = """
@@ -343,7 +343,7 @@ def get_users(id: int):
 @app.put("/users/{id}", tags=["users"])
 def update_user(id: int, user: UserSchema = Body(default=None)):
     
-    if user.role not in ["buyer", "seller", "manager"]:
+    if user.role not in ["buyer", "seller", "manager", "help", "operator"]:
         return {"message": "Invalid role", "status": 1}
     
     connection = connect()
