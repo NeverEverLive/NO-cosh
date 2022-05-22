@@ -799,12 +799,12 @@ def get_orders():
     return {"data": orders, "status": 0}
 
 
-@app.put("/products", tags=["products"])
-def update_product( image: UploadFile = File(...)):
+@app.put("/products/{id}", tags=["products"])
+def update_product(id:int, image: UploadFile = File(...)):
     connection = connect()
     cursor = connection.cursor()
     try:
-        # print("id",id)
+        print("id",id)
 
         result = uploader.upload(image.file)
         url = result.get('url')
@@ -812,11 +812,11 @@ def update_product( image: UploadFile = File(...)):
         # print("id",id)
         # print(url)
 
-        # sql = """UPDATE product_table 
-        #          set
-        #          image = %s
-        #          where id=%s"""
-        # cursor.execute(sql, (url, id))
+        sql = """UPDATE product_table 
+                 set
+                 image = %s
+                 where id=%s"""
+        cursor.execute(sql, (url, id))
     except Exception as error:
         return {"message": str(error), "status": 1}
     finally:
