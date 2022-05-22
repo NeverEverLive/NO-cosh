@@ -447,7 +447,6 @@ def get_advertisement():
 
         cursor.execute(sql, (id,))
         ads = cursor.fetchone()[0]
-
         print(ads[number])
 
         output_json = {
