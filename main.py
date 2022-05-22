@@ -357,7 +357,7 @@ def update_user(id: int = None, money: int = None, user: UserSchema = Body(defau
              """
 
     print(id, money)
-    cursor.execute(sql, (id, money))
+    cursor.execute(sql, (money, id))
 
     connection.commit()
     cursor.close()
