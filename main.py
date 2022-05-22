@@ -340,13 +340,14 @@ def get_users(id: int):
     return output_json
 
 
-@app.put("/users/{id}", tags=["users"])
-def update_user(id: int = None, money: int = None, user: UserSchema = Body(default=None)):
+@app.put("/users", tags=["users"])
+def update_user(id: int, money: int):
     
-    if user.role not in ["buyer", "seller", "manager", "help", "operator"]:
-        return {"message": "Invalid role", "status": 1}
+    # if user.role not in ["buyer", "seller", "manager", "help", "operator"]:
+    #     return {"message": "Invalid role", "status": 1}
     
-
+    print(id)
+    print(money)
 
     connection = connect()
     cursor = connection.cursor()
@@ -356,7 +357,7 @@ def update_user(id: int = None, money: int = None, user: UserSchema = Body(defau
              where id = %s
              """
 
-    print(id, money)
+    # print(id, money)
     cursor.execute(sql, (money, id))
 
     connection.commit()
