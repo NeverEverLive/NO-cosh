@@ -761,6 +761,8 @@ def get_orders():
         connection.commit()
         cursor.close()
         connection.close()
+    
+    return {"data": orders, "status": 0}
 # # db = SessionLocal()
 
 # @app.get("/categories", tags=["categories"], response_model=List[Category], status_code=200)
