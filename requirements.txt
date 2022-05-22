@@ -7,3 +7,4 @@ gunicorn
 pydentic[email]
 psycopg2-binary
 cloudinary
+python-multipart
