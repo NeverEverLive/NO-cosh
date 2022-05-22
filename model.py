@@ -101,16 +101,16 @@ class AdvertisementSchema(BaseModel):
     id: int = Field(default=None)
     text: str = Field(default=None)
 
-    def __init__(self, id, text):
-        super(AdvertisementSchema, self).__init__()
-        self.id = id
-        self.text = text
+    # def __init__(self, id, text):
+    #     super(AdvertisementSchema, self).__init__()
+    #     self.id = id
+    #     self.text = text
     
-    def __dict__(self):
-        return {
-            "id": self.id,
-            "text": self.text
-        }
+    # def __dict__(self):
+    #     return {
+    #         "id": self.id,
+    #         "text": self.text
+    #     }
 
     # def __dict__(self):
     #     return {"id": }
