@@ -389,6 +389,34 @@ def delete_user(id: int):
 
 
 
+@app.post("/users_update", tags=["users"])
+def update_user(id: int = Body(default=None), money: int = Body(default=None)):
+    
+    # if user.role not in ["buyer", "seller", "manager", "help", "operator"]:
+    #     return {"message": "Invalid role", "status": 1}
+    
+    print(id)
+    print(money)
+
+    connection = connect()
+    cursor = connection.cursor()
+    sql = """UPDATE user_table
+             set
+             balance = balance + %s
+             where id = %s
+             """
+
+    # print(id, money)
+    cursor.execute(sql, (money, id))
+
+    connection.commit()
+    cursor.close()
+    connection.close()
+
+
+    return {"message": "User updated!", "status": 2}
+
+
 
 @app.get("/test_db_orders", tags=["orders"])
 def get_all_orders(request: Request):
@@ -462,6 +490,9 @@ def get_advertisement():
         connection.close()
 
     return output_json
+
+
+
 
 
 @app.get("/advertisement", tags=["advertisement"])
