@@ -804,11 +804,15 @@ def update_product(id:int, image: UploadFile = File(...)):
     connection = connect()
     cursor = connection.cursor()
     try:
+
+
+        print("id",id)
+
         result = uploader.upload(image.file)
         url = result.get('url')
         
-        print("id",id)
-        print(url)
+        # print("id",id)
+        # print(url)
 
         sql = """UPDATE product_table 
                  set
