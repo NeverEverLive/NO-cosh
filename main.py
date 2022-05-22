@@ -497,7 +497,7 @@ def get_advertisements():
 
 
 @app.post("/advertisement", tags=["advertisement"])
-def create_advertisement(ad: AdvertisementSchema):
+def create_advertisement(ad: AdvertisementSchema = Body(default=None)):
     connection = connect()
     cursor = connection.cursor()
     try:
@@ -720,7 +720,7 @@ def get_orders():
                     WHERE id=%s) row"""
             cursor.execute(sql, (order['id_transaction'],))
             transaction = cursor.fetchone()[0]
-            # print(transaction)
+            print(transaction)
 
             sql = """SELECT to_json(row)
                     FROM (SELECT *
@@ -737,9 +737,12 @@ def get_orders():
             transaction['user_to'] = user_to
             transaction.pop("id_user_from")
             transaction.pop("id_user_to")
+            print(transaction)
 
             order["transaction"] = transaction
             order.pop("id_transaction")
+
+            print(order)
 
             sql = """SELECT json_agg(to_json(row))
                      FROM (SELECT *
@@ -748,6 +751,8 @@ def get_orders():
 
             cursor.execute(sql, (order["id"],))
             items = cursor.fetchone()[0]
+
+            print(items)
 
             
             for item in items:
