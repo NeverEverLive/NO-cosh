@@ -136,3 +136,18 @@ class CommectSchema(BaseModel):
                 "user_id": 1
             }
         }
+
+
+class ContentScheme(BaseModel):
+    id: int = Field(default=None)
+    text: int = Field(default=None)
+    image: int = Field(default=None)
+    date: str = Field(default=None)
+
+    class Config:
+        the_schema = {
+            "content_demo": {
+                "text": "test text",
+                "image": "url"
+            }
+        }

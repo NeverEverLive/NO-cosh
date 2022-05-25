@@ -1,11 +1,11 @@
 from fastapi import APIRouter, Request, UploadFile, File
 from fastapi.responses import JSONResponse
-from model import AdvertisementSchema
 from cloudinary import uploader
 import cloudinary
 
 general_pages_router = APIRouter()
 # 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
+
 
 @general_pages_router.get("/")
 async def home(request: Request):

@@ -40,7 +40,3 @@ def decodeJWT(access_token: str, refresh_token: str):
             "message": str(error),
             "status": 1
         }
-
-
-def refresh():
-    pass
